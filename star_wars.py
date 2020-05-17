@@ -22,23 +22,21 @@ def bigrams_in_text(texts):
             text = text.replace(symbol, '')
         text = text.lower()
         words = text.split()
-        bigrams = []
-        for i in range(1, len(words)):
-            bi = words[i - 1] + ' ' + words[i]
-            bigrams.append(bi)
-        bigrams = Counter(bigrams).most_common()
-        all_bis.extend(bigrams)
+        for i in range(len(words) - 1):
+            bi = words[i] + ' ' + words[i + 1]
+            all_bis.append(bi)
+    all_bis = Counter(all_bis).most_common()
     all_bis = [x[0] for x in all_bis]
     return all_bis
 
 
 def dict_from_eps():
     files = ['SW_EpisodeIV.txt', 'SW_EpisodeV.txt', 'SW_EpisodeVI.txt']
+    remarks = dd(list)
     for filename in files:
         with open(filename, encoding='utf-8') as f:
             text = f.read()
         text = text.splitlines()[1:]
-        remarks = dd(list)
         for line in text:
             number, char, text = line.split('" "', maxsplit=2)
             remarks[char.replace('"', '')].append(text.replace('"', ''))
@@ -52,10 +50,10 @@ def hints_from():
         hints[hint['name']] = {
             'height': hint['height'],
             'mass': hint['mass'],
-            'hair_color': hint['hair_color'],
-            'skin_color': hint['skin_color'],
-            'eye_color': hint['eye_color'],
-            'birth_year': hint['birth_year'],
+            'hair color': hint['hair_color'],
+            'skin color': hint['skin_color'],
+            'eye color': hint['eye_color'],
+            'birth year': hint['birth_year'],
             'gender': hint['gender'],
             'homeworld': hint['homeworld'],
             'species': hint['species']
@@ -66,6 +64,7 @@ def hints_from():
 
 def mapping(char):
     hints = hints_from()
+    print(hints)
     for hint in hints:
         if char.lower() in [x.lower() for x in hint.split()]:
             answer = hints[hint]
